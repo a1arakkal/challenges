@@ -1,0 +1,13 @@
+Package: challenges
+Title: Contains Functions For Challenges
+Version: 0.0.0.9000
+Authors@R: 
+    person("Alan", "Arakkal", , "alan-arakkal@uiowa.ed", role = c("aut", "cre"))
+Description: This pacakge contains functions for Challenges
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: Rcpp (>= 1.0.10)
+LinkingTo: Rcpp, RcppArmadillo
