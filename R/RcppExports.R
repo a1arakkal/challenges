@@ -5,3 +5,11 @@ log_like_cpp <- function(params, X, y, tpts) {
     .Call('_challenges_log_like_cpp', PACKAGE = 'challenges', params, X, y, tpts)
 }
 
+log_post_cpp <- function(params, X, y, tpts) {
+    .Call('_challenges_log_post_cpp', PACKAGE = 'challenges', params, X, y, tpts)
+}
+
+MH <- function(MH_draws, proposal_cov, X, y, tpts) {
+    .Call('_challenges_MH', PACKAGE = 'challenges', MH_draws, proposal_cov, X, y, tpts)
+}
+

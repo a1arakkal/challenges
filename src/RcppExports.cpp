@@ -25,9 +25,40 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// log_post_cpp
+double log_post_cpp(arma::colvec& params, arma::mat& X, arma::colvec& y, arma::colvec& tpts);
+RcppExport SEXP _challenges_log_post_cpp(SEXP paramsSEXP, SEXP XSEXP, SEXP ySEXP, SEXP tptsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::colvec& >::type params(paramsSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::colvec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::colvec& >::type tpts(tptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_post_cpp(params, X, y, tpts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// MH
+int MH(arma::mat& MH_draws, arma::mat& proposal_cov, arma::mat& X, arma::colvec& y, arma::colvec& tpts);
+RcppExport SEXP _challenges_MH(SEXP MH_drawsSEXP, SEXP proposal_covSEXP, SEXP XSEXP, SEXP ySEXP, SEXP tptsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type MH_draws(MH_drawsSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type proposal_cov(proposal_covSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::colvec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::colvec& >::type tpts(tptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(MH(MH_draws, proposal_cov, X, y, tpts));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_challenges_log_like_cpp", (DL_FUNC) &_challenges_log_like_cpp, 4},
+    {"_challenges_log_post_cpp", (DL_FUNC) &_challenges_log_post_cpp, 4},
+    {"_challenges_MH", (DL_FUNC) &_challenges_MH, 5},
     {NULL, NULL, 0}
 };
 
