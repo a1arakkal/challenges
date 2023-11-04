@@ -11,6 +11,17 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// chol_inv
+arma::mat chol_inv(arma::mat& x);
+RcppExport SEXP _challenges_chol_inv(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(chol_inv(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // log_like_cpp
 double log_like_cpp(arma::colvec& params, arma::mat& X, arma::colvec& y, arma::colvec& tpts);
 RcppExport SEXP _challenges_log_like_cpp(SEXP paramsSEXP, SEXP XSEXP, SEXP ySEXP, SEXP tptsSEXP) {
@@ -56,6 +67,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_challenges_chol_inv", (DL_FUNC) &_challenges_chol_inv, 1},
     {"_challenges_log_like_cpp", (DL_FUNC) &_challenges_log_like_cpp, 4},
     {"_challenges_log_post_cpp", (DL_FUNC) &_challenges_log_post_cpp, 4},
     {"_challenges_MH", (DL_FUNC) &_challenges_MH, 5},

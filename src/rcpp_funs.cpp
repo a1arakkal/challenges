@@ -4,6 +4,32 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 // [[Rcpp::export]]
+arma::mat chol_inv(arma::mat& x){
+  int n = x.n_rows;
+  int p = x.n_cols;
+  arma::mat L(n, p);
+  
+  for(int j = 0; j < p; j++){
+    double sum = 0;
+    for(int k = 0; k < j; k++){
+      sum += L(j,k) * L(j,k);
+    }
+    L(j,j) = sqrt(x(j,j) - sum);
+    
+    for(int i = j + 1; i < p; i++){
+      sum = 0;
+      for (int k = 0; k < j; k++){
+        sum += L(i,k) * L (j,k);
+      }
+      L(i,j) = (1.0 / L(j,j) * (x(i,j) - sum));
+    }
+  }
+  arma::mat L_inv = inv(L);
+  return L_inv.t()*L_inv;
+}
+
+
+// [[Rcpp::export]]
 double log_like_cpp(arma::colvec& params, arma::mat& X, arma::colvec& y, 
                     arma::colvec& tpts){
   int p = X.n_cols;
