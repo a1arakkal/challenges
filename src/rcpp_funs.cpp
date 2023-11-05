@@ -96,8 +96,8 @@ int MH(arma::mat& MH_draws, arma::mat& proposal_cov,
     double acc_prob = 0.0;
     int any_neg = 0;
 
-    for (int k = 0; k == 3; k++){
-      if(beta_proposal(k) < 0){
+    for (int k = 0; k <= 3; k++){
+      if(beta_proposal(k) < 0.0){
         any_neg = any_neg + 1;
       }
     }
