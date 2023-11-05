@@ -92,10 +92,23 @@ int MH(arma::mat& MH_draws, arma::mat& proposal_cov,
     MH_draws.row(j) = MH_draws.row(j-1);
     arma::colvec temp = MH_draws.row(j).t();
     beta_proposal = Rcpp::as<arma::colvec>(mvtnomrfun(1, temp, proposal_cov));
-    double unif = R::runif(0,1);    
-    double acc_prob = std::exp(log_post_cpp(beta_proposal, X, y, tpts) - 
-                                 log_post_cpp(temp, X, y, tpts));
-        
+    double unif = R::runif(0,1);
+    double acc_prob = 0.0;
+    int any_neg = 0;
+
+    for (int k = 0; k == 3; k++){
+      if(beta_proposal(k) < 0){
+        any_neg = any_neg + 1;
+      }
+    }
+
+    if(any_neg > 0){
+      acc_prob = R_NegInf;
+    } else {
+      acc_prob = std::exp(log_post_cpp(beta_proposal, X, y, tpts) - 
+                          log_post_cpp(temp, X, y, tpts));
+    }
+    
     if(unif < acc_prob){
       MH_draws.row(j) = beta_proposal.t();
       acc_count =  acc_count + 1;
