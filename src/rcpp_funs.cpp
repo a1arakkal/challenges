@@ -37,21 +37,10 @@ double log_like_cpp(arma::colvec& params, arma::mat& X, arma::colvec& y,
   arma::colvec gamma = params(arma::span(p, p+1));
   double b = std::exp(params(p+2));
   double sigma2 = std::exp(params(p+3));
-  arma::colvec X_beta = X*beta;
-  arma::colvec X_gamma = X*gamma;
-  arma::colvec a = X_beta.transform( [](double val) { return std::exp(val); } );
-  arma::colvec c = X_gamma.transform( [](double val) { return std::exp(val); } );
-
-  
-  arma::colvec C_T = -c % tpts;
-  arma::colvec mu_1 = -b * C_T.transform( [](double val) { return std::exp(val); } );
-  arma::colvec mu_2 = mu_1.transform( [](double val) { return std::exp(val); } );
-  arma::colvec mu = a % mu_2;
-  
-  arma::colvec y_mu = y-mu;
-  arma::colvec y_mu_2 = y_mu.transform( [](double val) { return pow(val, 2); } );
-  arma::colvec out_vec = (-1/ double(2))*std::log(sigma2) - (1/double((2*sigma2)))*y_mu_2;
-  double out = accu(out_vec);
+  arma::colvec a = arma::exp(X*beta);
+  arma::colvec c = arma::exp(X*gamma);
+  arma::colvec mu = a % arma::exp(-b * arma::exp(-c % tpts));
+  double out = (-1/ double(2))*std::log(sigma2) - (1/double((2*sigma2))) * arma::dot(y-mu, y-mu);
   return out;
 }
 
@@ -63,10 +52,7 @@ double log_post_cpp(arma::colvec& params, arma::mat& X, arma::colvec& y,
   arma::colvec beta_gamma = params(arma::span(0, p+1));
   double b = std::exp(params(p+2));
   double sigma2 = std::exp(params(p+3));
-
-  arma::mat sigma_inv = arma::diagmat(arma::ones(p*2));
-  arma::colvec sigma_inv_mean = sigma_inv*beta_gamma;
-  double p2_prior = -0.5*dot(beta_gamma, sigma_inv_mean);
+  double p2_prior = -0.5*dot(beta_gamma, beta_gamma);
   double out = log_like_cpp(params, X, y, tpts) + p2_prior + (R::dgamma(b, 1, 1, 1)) + (R::dgamma(sigma2, 1, 1, 1)) + params(p+2) + params(p+3);
 
   return out;
